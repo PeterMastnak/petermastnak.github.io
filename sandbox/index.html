@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../style.css">
+<title>sandbox · peter mastnak</title>
+<link rel="icon" type="image/x-icon" href="../favicon.jpg">
+<meta name="description" content="Peter Mastnak's sandbox: figures from ongoing research in oceanography, physics, and machine learning, with notes on what they show and why they're interesting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://petermastnak.github.io/sandbox/">
+<meta property="og:title" content="sandbox · peter mastnak">
+<meta property="og:description" content="Figures from ongoing research, with notes on what they show and why they're interesting.">
+<meta property="og:image" content="https://petermastnak.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<script src="../assets/js/theme.js"></script>
+</head>
+
+<body class="sandbox">
+
+<canvas id="jet" aria-hidden="true"></canvas>
+
+<p class="back"><a href="../">&larr; peter mastnak</a></p>
+
+<h1>sandbox</h1>
+
+<p class="lede">
+Figures, experiments, and small builds from things I'm working on or poking at,
+across oceanography, physics, machine learning, and code,
+with a few lines on what each shows, where it fits, and why I find it interesting.
+Work in progress, not peer-reviewed results.
+</p>
+
+<nav class="tags" aria-label="Filter entries by topic">
+<button type="button" data-tag="all" class="on">all</button>
+<button type="button" data-tag="oceanography">oceanography</button>
+<button type="button" data-tag="physics">physics</button>
+<button type="button" data-tag="ml">ml</button>
+<button type="button" data-tag="cs">cs</button>
+<button type="button" data-tag="apps">apps</button>
+</nav>
+
+<!--
+  HOW TO ADD AN ENTRY
+  1. Put the image in sandbox/img/, named YYYY-MM-short-name.png (keep it under ~1 MB;
+     PNG for plots, JPG for photos).
+  2. Copy the <article> block below, paste it at the TOP of the list (newest first), and edit:
+       data-tags   any of: oceanography physics ml cs apps (space-separated; new ones work too,
+                   just add a matching button above)
+       id          short slug; the entry gets a shareable link: /sandbox/#that-slug
+       <time>      datetime="YYYY-MM" plus the display text
+  3. Before posting anything built on lab data (tag tracks, unpublished results),
+     check it is OK to share.
+
+  <article class="entry" id="slug" data-tags="oceanography">
+  <p class="meta"><time datetime="2026-11">Nov 2026</time> · oceanography</p>
+  <h2>Title</h2>
+  <figure>
+  <a href="img/2026-11-name.png"><img src="img/2026-11-name.png" alt="Describe the figure" loading="lazy"></a>
+  <figcaption>One-line caption: data source, what the axes/colors are.</figcaption>
+  </figure>
+  <p>The paragraph: what it is, the math/physics, why I made it, what's fascinating.</p>
+  <p class="fits">Part of: project name / research thread</p>
+  </article>
+-->
+
+<div id="entries">
+
+<article class="entry" id="madeira-mode-water" data-tags="oceanography physics">
+<p class="meta"><time datetime="2026-10">Oct 2026</time> · oceanography · physics</p>
+<h2>A fence through Madeira Mode Water</h2>
+<figure>
+<a href="img/2026-10-madeira-mode-water-fence.png"><img src="img/2026-10-madeira-mode-water-fence.png" alt="Two 3D fence plots of the ocean near Madeira in April 2022: vertical sections along 18°W and 32°N, colored by potential vorticity (left) and salinity (right), with the mode water layer outlined in white and bluefin tuna positions and dive depths overlaid." loading="lazy"></a>
+<figcaption>
+ARMOR3D, April 2022. Two vertical sections, along 18°W and 32°N, to 800 m.
+Left: potential vorticity <i>q</i> = <i>f</i>N²; right: salinity.
+White outline: Madeira Mode Water (<i>q</i> &lt; 2×10⁻¹⁰ m⁻¹ s⁻¹, σ₀ 26.5–26.85); thin black lines: density surfaces.
+Black dots: bluefin tuna positions; pink bars: daily maximum dive depths.
+</figcaption>
+</figure>
+<!-- DRAFT: rewrite in your own words -->
+<p>
+Mode water is a thick, nearly uniform layer of water left behind by deep winter mixing.
+Once it's capped by summer warming, it sits below the surface like a fossil of last winter.
+North of Madeira that layer is Madeira Mode Water, and the cleanest way to find it is potential vorticity:
+<i>q</i> = <i>f</i>N², the Coriolis parameter times the squared buoyancy frequency.
+Where the water column is barely stratified, N² and therefore <i>q</i> drop toward zero,
+so mode water shows up as a low-<i>q</i> pool sandwiched between more stratified layers.
+I made this "fence" (two cross-sections slotted together) to see the layer in three dimensions instead of one slice at a time,
+and then to drop tuna positions and dive depths onto it to ask whether bluefin interact with this layer.
+What fascinates me is that a conserved quantity from geophysical fluid dynamics doubles as a practical habitat label:
+the same number that tells a physicist the layer will drift for months without losing its identity
+might also tell us where a predator finds its food.
+</p>
+<p class="fits">Part of: Atlantic bluefin tuna × mode water × BGC-Argo optics (Block Lab)</p>
+</article>
+
+</div>
+
+<p class="empty" hidden>Nothing here with that tag yet.</p>
+
+<script src="../assets/js/jet.js" defer></script>
+<script src="../assets/js/favicon.js" defer></script>
+<script src="../assets/js/sandbox.js" defer></script>
+</body>
+</html>

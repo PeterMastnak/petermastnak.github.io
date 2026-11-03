@@ -37,6 +37,7 @@ h2 {
 
 h3 {
 	font-weight: normal;
+	font-size: 1rem;
 	margin-bottom: 4.5rem;
 }
 
@@ -89,3 +90,149 @@ footer {
 	font-size: 0.9rem;
 	text-align: center;
 }
+
+#jet {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1;
+	pointer-events: none;
+}
+
+
+/* ---- depth readout + toast (made by jet.js) ---- */
+#depth, #toast {
+	position: fixed;
+	bottom: 12px;
+	font: 0.72rem ui-monospace, Menlo, monospace;
+	color: #9aa7b0;
+	pointer-events: none;
+}
+#depth { right: 14px; }
+#toast { left: 14px; bottom: 70px; opacity: 0; transition: opacity 0.5s; }
+@media (max-width: 1000px) { #depth { display: none; } }
+
+#ambient {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1;
+	pointer-events: none;
+}
+
+/* ---- projects map ---- */
+#projects {
+	position: relative;
+	min-height: 340px;
+}
+#track {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	pointer-events: none;
+}
+
+/* ---- news collapse ---- */
+#news.collapsed tr.older { display: none; }
+button.more {
+	background: none;
+	border: none;
+	padding: 0.3rem 0 0 1rem;
+	font: inherit;
+	font-size: 0.85rem;
+	color: #0a6a8a;
+	cursor: pointer;
+}
+button.more:hover { text-decoration: underline; }
+
+/* ---- night mode ---- */
+html.dark { background: #0b1620; }
+html.dark body { color: #c9d4dc; }
+html.dark h1, html.dark h2 { color: #eef3f6; }
+html.dark a, html.dark a:visited, html.dark button.more { color: #5cc8e6; }
+html.dark u { border-bottom-color: #c9d4dc; }
+html.dark #depth, html.dark #toast { color: #5f7484; }
+
+/* ---- twilight-zone light meter (bottom-left, made by light.js) ---- */
+#light {
+	position: fixed;
+	left: 14px;
+	bottom: 12px;
+	font: 0.72rem ui-monospace, Menlo, monospace;
+	color: #9aa7b0;
+	line-height: 1.45;
+	cursor: help;
+}
+#light .bar {
+	position: relative;
+	width: 180px;
+	height: 3px;
+	margin-top: 5px;
+	border-radius: 2px;
+	background: linear-gradient(to right, #f2c94c, #0a6a8a 35%, #10223a 70%, #000);
+	opacity: 0.6;
+}
+#light .bar i {
+	position: absolute;
+	top: -3px;
+	width: 2px;
+	height: 9px;
+	margin-left: -1px;
+	background: #333;
+	transition: left 0.2s;
+}
+html.dark #light { color: #5f7484; }
+html.dark #light .bar i { background: #e8eef2; }
+@media (max-width: 1000px) { #light { display: none; } }
+
+
+/* ---- sandbox ---- */
+.sandbox h1 { margin-top: 1rem; }
+.back { margin: 1.5rem 0 0 0; font-size: 0.9rem; }
+.lede { color: #555; margin-bottom: 1.5rem; }
+.tags { margin-bottom: 3rem; }
+.tags button {
+	background: none;
+	border: 1px solid #d5dde2;
+	border-radius: 999px;
+	padding: 0.15rem 0.75rem;
+	margin: 0 0.3rem 0.4rem 0;
+	font: inherit;
+	font-size: 0.85rem;
+	color: #0a6a8a;
+	cursor: pointer;
+}
+.tags button.on { background: #0a6a8a; border-color: #0a6a8a; color: #fff; }
+.entry { margin-bottom: 4.5rem; }
+.entry .meta { color: #888; font-size: 0.85rem; margin-bottom: 0; }
+.entry h2 { margin-top: 0.2rem; }
+.entry figure {
+	width: min(1100px, 96vw);
+	margin: 1rem 0 1.2rem 50%;
+	transform: translateX(-50%);
+}
+.entry figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 6px;
+	background: #fff;
+}
+.entry figure a:hover { border-bottom: none; }
+.entry figcaption {
+	max-width: 720px;
+	margin: 0.5rem auto 0 auto;
+	font-size: 0.82rem;
+	color: #777;
+}
+.entry .fits { font-size: 0.85rem; color: #888; }
+.empty { color: #888; }
+html.dark .lede { color: #9fb0bc; }
+html.dark .tags button { border-color: #2a3e4c; color: #5cc8e6; }
+html.dark .tags button.on { background: #5cc8e6; border-color: #5cc8e6; color: #0b1620; }
+html.dark .entry .meta, html.dark .entry figcaption, html.dark .entry .fits { color: #7c8e9b; }
