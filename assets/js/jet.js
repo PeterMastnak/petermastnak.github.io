@@ -39,6 +39,9 @@
   var running = false, raf = 0, lastSpawn = 0;
   var depth = 0, depthTarget = 0, hemi = 1, stirs = [];
   var MAX_EDDIES = 14;
+  // phones / narrow screens: the jet stays put and at full strength while scrolling
+  var narrow = false;
+  function jd() { return narrow ? 0 : depth; }   // depth as felt by the jet and eddies
 
   // seasonal cycle: +1 around late August (warmest, northernmost), -1 in late February
   var season = 0;
@@ -56,7 +59,7 @@
 
   // ---- flow field -------------------------------------------------------
   function jetCenter(x) {
-    return H * (0.62 + 0.05 * season + 0.6 * depth) + S * 0.55 * Math.sin(K * x - 0.005 * t) + S * 0.16 * Math.sin(2.3 * K * x + 0.0035 * t);
+    return H * (0.62 + 0.05 * season + 0.6 * jd()) + S * 0.55 * Math.sin(K * x - 0.005 * t) + S * 0.16 * Math.sin(2.3 * K * x + 0.0035 * t);
   }
   function jetSlope(x) {
     return S * 0.55 * K * Math.cos(K * x - 0.005 * t) + S * 0.16 * 2.3 * K * Math.cos(2.3 * K * x + 0.0035 * t);
@@ -64,13 +67,13 @@
 
   // analytic velocity; y is "up"
   function vel(x, y) {
-    var L = S * 0.2, U = 1.5 * (1 - 0.7 * depth);
+    var L = S * 0.2, U = 1.5 * (1 - 0.7 * jd());
     var eta = (y - jetCenter(x)) / L, u = 0, v = 0;
     if (eta > -12 && eta < 12) {
       var ch = Math.cosh(eta), s2 = U / (ch * ch);  // psi = -U L tanh(eta)
       u = s2; v = s2 * jetSlope(x);
     }
-    var ef = 1 - 0.6 * depth;
+    var ef = 1 - 0.6 * jd();
     for (var i = 0; i < eddies.length; i++) {
       var e = eddies[i], dx = x - e.x, dy = y - e.y, R2 = e.R * e.R, r2 = dx * dx + dy * dy;
       if (r2 > 9 * R2) continue;
@@ -78,8 +81,8 @@
       u += 2 * dy / R2 * ps;
       v -= 2 * dx / R2 * ps;
     }
-    if (depth > 0.02) {                       // mode-2 internal wave, grows with depth
-      var kx = 2 * Math.PI / (S * 5), m = 2 * Math.PI / H, A = depth * 0.45 / kx;
+    if (jd() > 0.02) {                        // mode-2 internal wave, grows with depth
+      var kx = 2 * Math.PI / (S * 5), m = 2 * Math.PI / H, A = jd() * 0.45 / kx;
       var th = kx * x - 0.008 * t;
       u -= A * m * Math.sin(th) * Math.cos(m * y);
       v += A * kx * Math.cos(th) * Math.sin(m * y);
@@ -109,6 +112,7 @@
 
   function resize() {
     W = window.innerWidth; H = window.innerHeight;
+    narrow = W < 900;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -187,8 +191,8 @@
       ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = th.comp;
       ctx.lineWidth = 0.8;
-      cCold = mix(th.cold, th.deep, depth).map(Math.round).join(',');
-      cWarm = mix(th.warm, th.deep, depth * 0.5).map(Math.round).join(',');
+      cCold = mix(th.cold, th.deep, jd()).map(Math.round).join(',');
+      cWarm = mix(th.warm, th.deep, jd() * 0.5).map(Math.round).join(',');
     }
     for (var j = 0; j < N; j++) {
       var p = P[j], yU = H - p.y;
@@ -200,7 +204,7 @@
       if (nx > W) { nx -= W; p.x -= W; } else if (nx < 0) { nx += W; p.x += W; }
       if (draw) {
         var sp = Math.sqrt(k2[0] * k2[0] + k2[1] * k2[1]);
-        var a = Math.min(0.85, 0.14 + sp * 0.45) * colFade(nx, th.under) * th.gain;
+        var a = Math.min(0.85, 0.14 + sp * 0.45) * colFade(nx, narrow ? 0.42 : th.under) * th.gain;
         var near = nearestEddy(nx, H - ny);
         ctx.strokeStyle = 'rgba(' + (near && near.warm ? cWarm : cCold) + ',' + a.toFixed(3) + ')';
         ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
