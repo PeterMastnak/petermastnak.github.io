@@ -68,6 +68,58 @@ Work in progress, not peer-reviewed results.
 
 <div id="entries">
 
+<article class="entry" id="edna-backtracking" data-tags="oceanography physics cs">
+<p class="meta"><time datetime="2026-11">Nov 2026</time> · oceanography · physics · cs</p>
+<h2>Running the ocean backwards to find where shark DNA came from</h2>
+<figure>
+<video src="img/2026-11-edna-backtrack-marina.mp4" poster="img/2026-11-edna-backtrack-marina.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Animation of 1000 particles released at a sampling station off Marina, Monterey Bay, and tracked 48 hours backward in time. The particles leave a trail colored from yellow (recent) to purple (48 hours before sampling) that curves west across the southern bay and around the Monterey Peninsula, past acoustic receivers marked as triangles."></video>
+<figcaption>
+Synthetic test, not real data. 1000 particles released where a water sample was taken off Marina (Monterey Bay, 23 Oct 2026)
+and tracked 48 h back in time through CMEMS 1/12° hourly surface currents with OpenDrift.
+Color: hours before sampling (yellow = recent). Triangles: acoustic receivers; red circle: a receiver with a (made-up) shark detection in the window.
+</figcaption>
+</figure>
+<!-- DRAFT: rewrite in your own words -->
+<p>
+Every animal leaves DNA behind in the water: skin cells, mucus, scales, waste.
+Filter a few liters of seawater, sequence or amplify what's on the filter, and you can tell which species were around
+without ever seeing them. That's environmental DNA, or eDNA.
+For white sharks it's tempting, because they're hard to see and the ones we've tagged only show up when they swim past an acoustic receiver.
+</p>
+<p>
+In October we sent an uncrewed surface vehicle along the Monterey Bay shore from Monterey to Santa Cruz:
+11 stops next to receivers, two 34-minute filter samples at each, 57 km in about 22 hours,
+with the route and timing worked out in the <a href="https://petermastnak.github.io/glider-mission-planner/">mission planner</a> I built for it.
+The catch is that a positive sample tells you the DNA was in that water, not where the shark was.
+Currents move the water while the DNA slowly falls apart, so the shark could have been kilometers upstream a day earlier.
+</p>
+<p>
+So I run the ocean backwards. Particles start at the sample and are stepped back in time through modeled currents,
+with a small random kick for the currents we can't resolve:
+</p>
+<p class="eq"><b>x</b>(<i>t</i> − Δ<i>t</i>) = <b>x</b>(<i>t</i>) − [<b>u</b>(<b>x</b>, <i>t</i>) + <b>ε</b>] Δ<i>t</i></p>
+<p>
+eDNA decays roughly first-order, so a particle that has been traced back τ hours carries a survival weight
+</p>
+<p class="eq"><i>S</i>(τ) = e<sup>−<i>k</i>τ</sup>, &nbsp; <i>k</i> ≈ 0.055 h<sup>−1</sup> &nbsp;(half-life ≈ 13 h)</p>
+<p>
+with <i>k</i> from tank and field studies of marine fish eDNA, which span about 0.01–0.1 h<sup>−1</sup>.
+Binning all the weighted positions on a 1 km grid and normalizing gives a map <i>M</i> of where the sampled water,
+and so the DNA, most likely came from. The test is then whether that map overlaps the receivers that actually heard a tagged shark
+in the hours before sampling:
+</p>
+<p class="eq"><i>O</i> = Σ<sub><i>ij</i></sub> <i>M</i><sub><i>ij</i></sub> · 𝟙[cell <i>ij</i> within 1 km of a receiver with a detection]</p>
+<p>
+A nice detail: instead of weights you can delete particles at random with probability 1 − e<sup>−<i>k</i>Δ<i>t</i></sup> each step.
+The places where they disappear then land, in distribution, exactly on the survival-weighted map,
+so "where the DNA came from" and "where a particle dies" are the same picture.
+What I like about this is that it turns a yes/no lab result into a spatial question
+the acoustic array can check independently. Everything above is a synthetic dry run;
+once the real copies per liter and detections are in, I'll rerun it and update this.
+</p>
+<p class="fits">Part of: Monterey Bay white shark eDNA × acoustic telemetry (Block Lab)</p>
+</article>
+
 <article class="entry" id="madeira-mode-water" data-tags="oceanography physics">
 <p class="meta"><time datetime="2026-10">Oct 2026</time> · oceanography · physics</p>
 <h2>A fence through Madeira Mode Water</h2>
